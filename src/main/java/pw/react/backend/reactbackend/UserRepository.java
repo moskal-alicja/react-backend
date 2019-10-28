@@ -5,7 +5,9 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-interface UserCrudRepository extends CrudRepository<User, Integer> {}
+import java.util.Optional;
+
+interface UserCrudRepository extends CrudRepository<User, Long> {}
 
 @Repository
 public class UserRepository {
@@ -24,6 +26,30 @@ public class UserRepository {
     public void addNewUser(NewUserRequest newUserRequest){
         User user = new User(newUserRequest.getName(),newUserRequest.getLastName(), newUserRequest.getBirthDate(), newUserRequest.isActive(), newUserRequest.getLogin());
         crudRepository.save(user);
+    }
+
+    public boolean isUserPresent(long id) {
+        return crudRepository.findById(id).isPresent();
+    }
+
+    public void deleteUser(long id) {
+            crudRepository.deleteById(id);
+    }
+
+    public Optional<User> getUser(long id) {
+        return crudRepository.findById(id);
+    }
+
+    public Optional<User> updateUser(NewUserRequest newUserRequest, long id) {
+        return crudRepository.findById(id).map(user -> {
+            user.setName(newUserRequest.getName());
+            user.setLastName(newUserRequest.getLastName());
+            user.setBirthDate(newUserRequest.getBirthDate());
+            user.setActive(newUserRequest.isActive());
+            crudRepository.save(user);
+            return user;
+        });
+
     }
 
 }

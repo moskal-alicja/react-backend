@@ -16,6 +16,24 @@ public class User {
     private boolean active;
     private String login;
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+
+
     public User() {
     }
 
