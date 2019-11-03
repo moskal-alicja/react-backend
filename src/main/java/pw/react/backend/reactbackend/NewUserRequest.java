@@ -17,6 +17,13 @@ public class NewUserRequest {
     @NotNull
     private String login;
 
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    private Long testId;
+
+
     public String getName() {
         return name;
     }
@@ -46,5 +53,9 @@ public class NewUserRequest {
         this.birthDate = birthDate;
         this.active = active;
         this.login = login;
+    }
+
+    public void setId(long l) {
+        this.testId = l;
     }
 }

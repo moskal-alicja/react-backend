@@ -10,21 +10,25 @@ import java.util.List;
 import java.util.Optional;
 
 interface UserCrudRepository extends CrudRepository<User, Long> {
+    Optional<User> findByLogin(String Login);
 }
 
 @Repository
 public class UserRepository {
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+//    @Autowired
+//    private JdbcTemplate jdbcTemplate;
 
     @Autowired
     private UserCrudRepository crudRepository;
 
-    public Integer  getUsersCountByLogin(String login){
-        return jdbcTemplate.queryForObject("select count(*) from Users where login = (?)", Integer.class, login);
-
+    public Optional<User> getUserByLogin(String login) {
+        return crudRepository.findByLogin(login);
     }
+//    public Integer  getUsersCountByLogin(String login){
+//        return jdbcTemplate.queryForObject("select count(*) from Users where login = (?)", Integer.class, login);
+//
+//    }
 
     public User addNewUser(NewUserRequest newUserRequest){
         User user = new User(newUserRequest.getName(),newUserRequest.getLastName(), newUserRequest.getBirthDate(), newUserRequest.isActive(), newUserRequest.getLogin());
@@ -63,5 +67,8 @@ public class UserRepository {
        return users;
     }
 
+    public Optional<User> findById(long id) {
+        return crudRepository.findById(id);
+    }
 }
 

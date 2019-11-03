@@ -10,11 +10,20 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     private String name;
     private String lastName;
     private String birthDate;
     private boolean active;
     private String login;
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
 
     public void setName(String name) {
         this.name = name;

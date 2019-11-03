@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class LoginAlreadyExistsException extends RuntimeException {
 
     LoginAlreadyExistsException(String login) {
-        super( String.format("Login %s already exists", login));
+        super( String.format("Login %s already exists.", login));
     }
 }
