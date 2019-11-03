@@ -5,9 +5,12 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-interface UserCrudRepository extends CrudRepository<User, Long> {}
+interface UserCrudRepository extends CrudRepository<User, Long> {
+}
 
 @Repository
 public class UserRepository {
@@ -23,9 +26,9 @@ public class UserRepository {
 
     }
 
-    public void addNewUser(NewUserRequest newUserRequest){
+    public User addNewUser(NewUserRequest newUserRequest){
         User user = new User(newUserRequest.getName(),newUserRequest.getLastName(), newUserRequest.getBirthDate(), newUserRequest.isActive(), newUserRequest.getLogin());
-        crudRepository.save(user);
+        return crudRepository.save(user);
     }
 
     public boolean isUserPresent(long id) {
@@ -50,6 +53,14 @@ public class UserRepository {
             return user;
         });
 
+    }
+
+    public List<User> findAll() {
+        List<User> users = new ArrayList<User>();
+        for (User user : crudRepository.findAll()) {
+            users.add(user);
+        }
+       return users;
     }
 
 }

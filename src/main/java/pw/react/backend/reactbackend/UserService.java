@@ -4,19 +4,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
-@Service
-public class UserService {
 
-    @Autowired
+public interface UserService {
+    User updateUser(NewUserRequest newUserRequest, long id);
+    User addNewUser(NewUserRequest newUserRequest);
+    boolean deleteUser(long id);
+    User getUser(long id);
+    List<User> getAllUsers();
+}
+
+@Service
+class UserServiceImpl implements UserService {
+
     private UserRepository userRepository;
 
-    public boolean addNewUser(NewUserRequest newUserRequest){
+    @Autowired
+    UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public User addNewUser(NewUserRequest newUserRequest){
         if(userAlreadyExists(newUserRequest.getLogin()))
-            return false;
-        userRepository.addNewUser(newUserRequest);
-        return true;
+            throw new LoginAlreadyExistsException(newUserRequest.getLogin());
+        return userRepository.addNewUser(newUserRequest);
     }
 
     public boolean deleteUser(long id){
@@ -24,8 +37,7 @@ public class UserService {
             userRepository.deleteUser(id);
             return true;
         }
-        return false;
-
+        else throw new UserNotFoundException(id);
     }
 
     public User getUser(long id) {
@@ -36,6 +48,7 @@ public class UserService {
             throw new UserNotFoundException(id);
     }
 
+    @Override
     public User updateUser(NewUserRequest newUserRequest, long id) {
         Optional<User> user = userRepository.updateUser(newUserRequest, id);
         if(user.isPresent())
@@ -52,6 +65,10 @@ public class UserService {
     private boolean doesUserExists(long id) {
         if(userRepository.getUser(id).isPresent()) return true;
         return false;
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 
 }
